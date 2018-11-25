@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+<script type="text/javascript" src="static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="static/dist/vis.js"></script>
+<script type="text/javascript" src="static/dist/vis.min.js"></script>
+<link href="static/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+<link href="static/dist/vis.min.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    #mynetwork {
+                width: 600px;
+                height: 600px;
+                border: 1px solid lightgray;
+            }
+</style>
+</head>
+<body>
+ <!--   <form action="/getpath" method="get">-->
+        {% csrf_token %}
+        <input type="text" name="q" id="mytext">
+        <input type="button" value="Submit" id="mybutton">
+        <input type="text" name="q" id="textfrom">
+        <input type="text" name="q" id="textto">
+        <input type="button" value="Submit" id="mybutton2">
+ <!--   </form>-->
+    <p>{{ rlt }}</p>
+    <div id="network">
+      
+    </div>
+</body>
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#mybutton").click(function(){
+        var fname = $("#mytext").val();
+        $.get("http://localhost:8000/getpath", {'fname':fname,'tname':'温家宝'},function(ret){
+            mynodes=ret[0];
+            myrelation=ret[1];
+        var container = document.getElementById('network');
+            nodes=[];
+            edges=[];
+            var j=0;
+            for(var i in mynodes){
+             nodes.push({id:i,label:mynodes[i]});  
+             j=j+1;
+             if(j>10)break;
+            }
+            var a=0
+            for(var i in myrelation){
+                if(a==0){
+                    a++;
+                }
+                else{
+                edges.push({from:'0',to:i,value:myrelation[i]});
+                }
+            } 
+            nodeset=new vis.DataSet(nodes);
+            edgeset = new vis.DataSet(edges);  
+            var data = {
+            nodes: nodes,
+            edges: edgeset
+            };
+            alert('找到啦');
+            var options = {
+                nodes: {
+                    shape: 'dot',
+                    scaling:{
+                        label: {
+                        min:8,
+                        max:20
+                        }
+                    },
+                    color:{
+                        highlight: {//节点选中时状态颜色
+                            background: '#ec7171',
+                            border: '#f90909'
+                        },
+                    }
+                },
+                layout:{
+                    randomSeed:1,//配置每次生成的节点位置都一样，参数为数字1、2等
+                },
+            };
+            network = new vis.Network(container, data, options);
+            });
+         });
+$("#mybutton2").click(function(){
+        var fname = $("#textfrom").val();
+        var tname = $("#textto").val();
+        $.get("http://localhost:8000/getpathten", {'fname':fname,'tname':tname},function(ret){
+            
+            mynodes=ret[0];
+            myrelation=ret[1];
+            //myindex=ret[2];
+
+        var container = document.getElementById('network');
+            nodes=[];
+            edges=[];
+            var j=0;
+            var myfrom;
+            var myto;
+            for(var i in mynodes){
+                //alert(myindex[i]);
+
+             nodes.push({id:i,label:mynodes[i]});  
+            }
+           // alert('dcd');
+            var a=0;
+            for(var i in myrelation){
+                //alert(myrelation[i]["start"]);
+                edges.push({from:myrelation[i]["start"],to:myrelation[i]["end"],value:myrelation[i]["value"]});
+            } 
+
+            nodeset= new vis.DataSet(nodes);
+            alert('yes');
+            edgeset = new vis.DataSet(edges); 
+
+            var data = {
+            nodes: nodes,
+            edges: edgeset
+            };
+            alert('找到啦');
+            var options = {
+                nodes: {
+                    shape: 'dot',
+                    scaling:{
+                        label: {
+                        min:8,
+                        max:20
+                        }
+                    },
+                    color:{
+                        highlight: {//节点选中时状态颜色
+                            background: '#ec7171',
+                            border: '#f90909'
+                        },
+                    }
+                },
+                layout:{
+                    randomSeed:1,//配置每次生成的节点位置都一样，参数为数字1、2等
+                },
+            };
+            network = new vis.Network(container, data, options);
+            });
+         });
+
+
+
+             });
+</script>
+</html>

@@ -1,0 +1,541 @@
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>网络群体市场</title>
+<script type="text/javascript" src="static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="static/dist/vis.js"></script>
+<script type="text/javascript" src="static/dist/bootstrap.min.js"></script>
+<script type="text/javascript" src="static/dist/jquery.dataTables.min.js"></script>
+<!--<script type="text/javascript" src="static/dist/vis.min.js"></script>-->
+<link href="static/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+<link href="static/dist/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="static/dist/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+<!--<link href="static/dist/vis.min.css" rel="stylesheet" type="text/css" />-->
+<style type="text/css">
+    #mynetwork {
+                width: 600px;
+                height: 600px;
+                border: 1px solid lightgray;
+            }
+.button1{
+width:30%;
+margin:10px;
+float:left;
+height:50%;
+border-style: dashed;
+border-color: #FFFF99;
+border-radius:50px;
+position:relative;
+}
+.pathdiv{
+width:30%;
+margin:10px;
+float:left;
+height:45%;
+border-style: dashed;
+border-color: #FFFF99;
+border-radius:50px;
+position:absolute;left:0;bottom:0;
+}
+.mytablediv{
+width:100%;
+margin:10px;
+float:left;
+height:45%;
+border-style: dashed;
+border-color: #FFFF99;
+border-radius:50px;
+
+}
+#network{  
+width:60%;
+margin:10px;
+float:left;
+height:100%;
+border:1px solid #000;
+border-radius:80px;
+}
+#mypopever1{
+text-align:center;
+border:1px solid #a9c9e2;
+padding:10px 40px; 
+background:#e8f5fe;
+width:270px;
+height:150px;
+border-radius:25px;
+-moz-border-radius:25px; /* ÀÏµÄ Firefox */
+}
+
+
+    
+.button01 {
+  width: 200px;
+  margin: 13px;
+  cursor:pointer
+}
+
+.button01 h3 {
+  display: block;
+  height: 50px;
+  width: 200px;
+  
+  /*TYPE*/
+  color: white;
+  font: 17px/50px Helvetica, Verdana, sans-serif;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  
+  /*GRADIENT*/  
+  background: #660066;
+  background: -moz-linear-gradient(top, #00b7ea 0%, #009ec3 100%); 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00b7ea), color-stop(100%,#009ec3)); 
+  background: -webkit-linear-gradient(top, #00b7ea 0%,#009ec3 100%); 
+  background: -o-linear-gradient(top, #00b7ea 0%,#009ec3 100%); 
+  background: -ms-linear-gradient(top, #00b7ea 0%,#009ec3 100%); 
+  background: linear-gradient(top, #00b7ea 0%,#009ec3 100%); 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#009ec3',GradientType=0 ); 
+}
+
+.button01 h3, p {
+    -webkit-border-radius: 10px;
+     -moz-border-radius: 10px;
+          border-radius: 10px;
+  
+  -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+     -moz-box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+          box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+}
+
+p {
+  background: #222;
+  display: block;
+  height: 33px;
+  width: 180px; 
+  margin: -50px 0 0 10px;
+  
+  /*TYPE*/
+  text-align: center;
+  font: 12px/45px Helvetica, Verdana, sans-serif;
+  color: #fff;
+  
+  /*POSITION*/
+  position: absolute;
+  z-index: -1;
+  
+  /*TRANSITION*/  
+  -webkit-transition: margin 0.5s ease;
+     -moz-transition: margin 0.5s ease;
+       -o-transition: margin 0.5s ease;
+      -ms-transition: margin 0.5s ease;
+          transition: margin 0.5s ease;
+}
+
+
+/*HOVER*/
+
+.button01:hover .bottom {
+  margin: -17px 0 0 10px;
+}
+
+
+
+/*ACTIVE °´¶¯Ê±ÑÕÉ«±ä»¯*/
+.button01 h3:active {
+      background: #00b7ea; 
+      background: -moz-linear-gradient(top,  #00b7ea 36%, #009ec3 100%); 
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(36%,#00b7ea), color-stop(100%,#009ec3)); 
+      background: -webkit-linear-gradient(top,  #00b7ea 36%,#009ec3 100%); 
+      background: -o-linear-gradient(top,  #00b7ea 36%,#009ec3 100%); 
+      background: -ms-linear-gradient(top,  #00b7ea 36%,#009ec3 100%); 
+      background: linear-gradient(top,  #00b7ea 36%,#009ec3 100%); 
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b7ea', endColorstr='#009ec3',GradientType=0 ); 
+
+}
+
+
+.button01:active .bottom {
+  margin: -20px 0 0 10px;
+}
+
+
+
+          input{
+                border: 1px solid #ccc;
+                padding: 7px 0px;
+                border-radius: 3px;
+                padding-left:5px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+            }
+            input:focus{
+                    border-color: #66afe9;
+                    outline: 0;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+            }
+            table
+         {
+              table-layout: fixed;
+              width: 100%;
+          }
+         td
+         {
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+         }
+</style>
+</head>
+<body>
+  <div  class='button1'>
+<br/>
+<center>
+ <input type="text" value='person' name="q" id="mytext" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="color:#999999" >
+<div class="button01">
+      <h3 id="mybutton">Submit</h3>
+      <p class="bottom">显示关系最近十人</p>
+    </div>
+<br/>
+<br/>
+<nobr>
+<input type="text" value='from person' name="q" id="textfrom" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="color:#999999" >
+<input type="text" value='to person' name="q" id="textto" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="color:#999999">
+</nobr>
+<div class="button01">
+      <h3 id="mybutton2">Submit</h3>
+      <p class="bottom">显示两人前十条最短路径</p>
+</div>
+</center>
+
+</div>
+<div class="pathdiv" id="tenpath" >
+  <ul>
+    <li style="color:#FFFF99" ><span style="color: black" id="path1"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path2"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path3"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path4"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path5"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path6"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path7"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path8"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path9"></span></li>
+    <li style="color:#FFFF99" ><span style="color: black" id="path10"></span></li>
+  </ul>
+</div>
+    <div style="position:relative;"">
+    <div id="network">
+      
+    </div>
+    <div  style="max-width:50%;position:absolute;left:905;top:0;display:none;" id="mypopever1"></div>
+</div>
+
+
+<div class="container-fluid"> 
+
+ <div class="col-xs-12 col-sm-12" id="shownews"  style="overflow:auto;visibility: hidden;overflow-x:hidden;" >
+<table id="newstable" class="display" cellspacing="0" width="100%">
+   <thead>
+      <tr>
+            <th class="col-xs-6 col-sm-1" >序号</th>
+            <th class="col-xs-6 col-sm-3" >新闻标题</th>
+            <th class="col-xs-6 col-sm-7" >新闻内容</th>
+        </tr>
+   </thead>
+   <tbody>
+      
+   </tbody>
+</table>
+
+ </div>
+                       
+</div>
+
+</body>
+<script type="text/javascript">
+$(document).ready(function(){
+//$("#mytext").val()='请吃饭';
+$("#mybutton").click(function(){
+  $("#mypopever1").hide();
+        var fname = $("#mytext").val();
+        $.get("http://10.48.150.47:8000/getpath", {'fname':fname,'tname':'温家宝'},function(ret){
+            mynodes=ret[0];
+            myrelation=ret[1];
+            var myflag=0;
+            for(var i in mynodes){
+              myflag=1;
+              break;
+            }
+            if (myflag!=0){
+              alert('找到啦');
+            }
+            else{
+              alert('没找到');
+            }
+        var container = document.getElementById('network');
+            nodes=[];
+            edges=[];
+            var j=0;
+            for(var i in mynodes){
+              if(mynodes[i]['name']==fname){
+                nodes.push({id:i,label:mynodes[i]['name'],color:{background:"#FFFF99"}});
+              }
+              else{
+                nodes.push({id:i,label:mynodes[i]['name']});
+              }
+             //nodes.push({id:i,label:mynodes[i]['name']});  
+             //j=j+1;
+             //if(j>10)break;
+            }
+            var a=0
+            for(var i in myrelation){
+                if(a==0){
+                    a++;
+                }
+                else{
+                edges.push({from:'0',to:i,value:myrelation[i],label:myrelation[i].toString()});
+                }
+            } 
+            nodeset=new vis.DataSet(nodes);
+            edgeset = new vis.DataSet(edges);  
+            var data = {
+            nodes: nodes,
+            edges: edgeset
+            };
+            var options = {
+                nodes: {
+                    shape: 'dot',
+                    scaling:{
+                        label: {
+                        min:8,
+                        max:20
+                        }
+                    },
+                    color:{
+                        highlight: {//节点选中时状态颜色
+                            background: '#ec7171',
+                            border: '#f90909'
+                        },
+                    }
+                },
+                layout:{
+                    randomSeed:1,//配置每次生成的节点位置都一样，参数为数字1、2等
+                },
+            };
+            network = new vis.Network(container, data, options);
+            network.on("doubleClick", function(params) {
+                var x1=params.nodes;
+                var y1=params.edges;
+                /*var click_edge_id = params.edges[0];
+
+                edge2names = click_edge_id.split("&");
+                fname=edge2names[0];
+                tname=edge2names[1];*/
+                //alert(y1.length);
+                if (x1.length==0 && y1.length==0)
+                      $("#mypopever1").hide();
+                if(x1.length!=0){
+                  var x = params.pointer.DOM.x;
+                  var y = params.pointer.DOM.y;
+                  mystring="";
+
+                  mystring+="<h4>name: "+mynodes[x1]['name']+"</h4>"+"<h4>pagerank: "+mynodes[x1]['pagerank']+"</h4>"+"<h4>groupid: "+mynodes[x1]['group']+"</h4>";
+                    $('#mypopever1').show();
+                    $('#mypopever1').html(mystring);
+                    $('#mypopever1').css('color',  'black');
+                    $('#mypopever1').css('left', (x + 250) + 'px');
+                    $('#mypopever1').css('top', (y-20) + 'px');
+                }
+              });
+
+            });
+         });
+$("#mybutton2").click(function(){
+  $("#mypopever1").hide();
+        var fname = $("#textfrom").val();
+        var tname = $("#textto").val();
+        if(fname!=tname){
+        $.get("http://10.48.150.47:8000/getpathten", {'fname':fname,'tname':tname},function(ret){
+            
+            mynodes=ret[0];
+            myrelation=ret[1];
+            mypath=ret[2];
+            //myindex=ret[2];
+            var myflag=0;
+            for(var i in mynodes){
+              myflag=1;
+              break;
+            }
+            if (myflag!=0){
+              alert('找到啦');
+            }
+            else{
+              alert('没找到');
+            }
+        var container = document.getElementById('network');
+            nodes=[];
+            edges=[];
+            var j=0;
+            var myfrom;
+            var myto;
+            for(var i in mynodes){
+              if(mynodes[i]['name']==fname||mynodes[i]['name']==tname){
+                nodes.push({id:i,label:mynodes[i]['name'],color:{background:"#FFFF99"}});
+
+              }
+              else{
+                nodes.push({id:i,label:mynodes[i]['name']});
+              }
+            }
+            var a=0;
+            rem=-1;
+            path="";
+
+            for(var i in myrelation){
+                edges.push({id:mynodes[myrelation[i]["start"]]['name']+"&"+mynodes[myrelation[i]["end"]]['name'],from:myrelation[i]["start"],to:myrelation[i]["end"],value:myrelation[i]["value"]});
+              //alert(mynodes[myrelation[i]["start"]]['name']);
+              }
+
+            for(var i in mypath){
+              if(mypath[i]["pathid"]==rem){
+                    path=path+mypath[i]["value"].toString()+mynodes[mypath[i]["end"]]['name'];
+                }
+                else{
+                  if (rem!=-1){$("#path"+rem.toString()).text(path);}
+                   path=""+mynodes[mypath[i]["start"]]['name']+mypath[i]["value"].toString()+mynodes[mypath[i]["end"]]['name'];
+                    rem=mypath[i]["pathid"];
+                }
+            }
+            
+            if(rem!=-1){
+            $("#path"+rem.toString()).text(path);
+            //alert(rem);
+            while(rem<=9){
+              rem+=1;
+              $("#path"+rem.toString()).text("");
+              //alert(rem);
+            }
+            }
+            else{
+              //alert('jh');
+              rem=1;
+              $("#path"+rem.toString()).text("");
+
+            while(rem<10){
+              rem+=1;
+
+              $("#path"+rem.toString()).text("");
+            }
+
+            }
+            
+            nodeset= new vis.DataSet(nodes);
+            edgeset = new vis.DataSet(edges); 
+
+            var data = {
+            nodes: nodes,
+            edges: edgeset
+            };
+            var options = {
+                nodes: {
+                    shape: 'dot',
+                    scaling:{
+                        label: {
+                        min:8,
+                        max:20
+                        }
+                    },
+                    color:{
+                        highlight: {//节点选中时状态颜色
+                            background: '#ec7171',
+                            border: '#f90909'
+                        },
+                    }
+                },
+                layout:{
+                    randomSeed:1,//配置每次生成的节点位置都一样，参数为数字1、2等
+                },
+            };
+            network = new vis.Network(container, data, options);
+
+            network.on("doubleClick", function(params) {
+                var x1=params.nodes;
+                var y1=params.edges;
+                
+                //alert(x1.length);
+                if (x1.length==0 && y1.length==0)
+                      $("#mypopever1").hide();
+                if(x1.length!=0){
+                  var x = params.pointer.DOM.x;
+                  var y = params.pointer.DOM.y;
+                  mystring="";
+                  mystring+="<h4>name: "+mynodes[x1]['name']+"</h4>"+"<h4>pagerank: "+mynodes[x1]['pagerank']+"</h4>"+"<h4>groupid: "+mynodes[x1]['group']+"</h4>";
+                    $('#mypopever1').show();
+                    $('#mypopever1').html(mystring);
+                    $('#mypopever1').css('color',  'black');
+                    $('#mypopever1').css('left', (x + 250) + 'px');
+                    $('#mypopever1').css('top', (y-20) + 'px');
+                }
+                else if(y1.length!=0){
+                  var click_edge_id = params.edges[0];  
+                edge2names = click_edge_id.split("&");
+                fname=edge2names[0];
+                tname=edge2names[1];
+                $.get("http://10.48.150.47:8000/getnews", {'fname':fname,'tname':tname},function(ret){
+                          
+                          news=ret[0];
+                          var obj=new Array(1);
+                          for (var i in news){
+                            obj[i]=[i,news[i]['title'],news[i]['context']];
+                          }
+                          if ($('#newstable').hasClass('dataTable')) {
+                            dttable = $('#newstable').dataTable();
+                            dttable.fnClearTable(); //清空一下table
+                            dttable.fnDestroy(); //还原初始化了的datatable
+                          }
+                          alert("table!");
+                          document.getElementById("shownews").style.visibility="";
+                          //document.getElementById("shownews").style.height="500px";
+                          var xtable=$('#newstable').DataTable( {  
+                          dom: 'Bfrtip',  
+                          data: obj,
+                          "columns": [
+                   
+                            { title: "新闻序号", sortable: false },
+                            { title: "新闻标题", sortable: false },
+                            { title: "新闻内容", sortable: false },
+                
+                          ],
+                          "buttons": [  
+                                   {  
+                                       'extend': 'excel',  
+                                       'text': '导出',//定义导出excel按钮的文字  
+                                       'exportOptions': {  
+                                         /*  'modifier': {  
+                                               'page': 'current'  
+                                           } */ 
+                                       }  
+                                   }  
+                               ],  
+                      } ); 
+
+                       });
+              }
+                //alert(params.edges[0]);
+
+
+            });
+            });
+}
+else{
+  alert('人名不能一样！');
+}
+         });
+
+             });
+</script>
+</html>
